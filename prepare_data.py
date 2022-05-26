@@ -3,12 +3,12 @@
 # do some tweak operations
 # save as csv for later use in dashboard
 
+# run this script to update the local cs file!!!
+
+
 import sqlite3
 import pandas as pd
-import seaborn as sns
-from matplotlib import pyplot as plt
-import datetime
-import matplotlib.ticker as ticker
+
 
 def read_sqlite_db_into_pandas(db_file,query, parse_dates, index_col):
     """
@@ -28,9 +28,9 @@ def read_sqlite_db_into_pandas(db_file,query, parse_dates, index_col):
     return df
     
     
-def calculate_mean_percent_per_day(df):
+def clean_data(df):
     """
-    Calculates the mean percent per day
+    cleans the data
     """
     
     # create a date column to better work with the dates
@@ -42,11 +42,13 @@ def calculate_mean_percent_per_day(df):
     
     #create a empty df with new daily index to dump results in
     new_df =pd.DataFrame(index=new_index)
-    # calulate man and std for every day. if reindexing results in nan (missing days)
-    # then interpolate the data
-    new_df['mean']=df.groupby('Date').mean().reindex(pd.date_range(start=df.Date.min(), end=df.Date.max(), freq='D')).interpolate()
-    new_df['SD']=df.groupby('Date').std().reindex(pd.date_range(start=df.Date.min(), end=df.Date.max(), freq='D')).interpolate()
+    # group data by date and contract. taking always first element to drop duplicate entrys
+    new_df=df.groupby(['Date','contract']).first()
+
+    new_df.to_csv('Validator_data_from_'+str(df.Date.min())+'_until_'+str(df.Date.max())+'.csv')
     return new_df
+
+
 if __name__ == '__main__':
     
     # db file
@@ -65,11 +67,10 @@ if __name__ == '__main__':
     
     # read sqlite db into pandas dataframe
     df = read_sqlite_db_into_pandas(db_file, query, parse_dates, index_col)
-    
+    print(df.head)
     # nach timestamp gruppieren und mean und sd berrechen
     
     # get dates only
-    mean= calculate_mean_percent_per_day(df)
-
-    
+    clean= clean_data(df)
+    clean.to_csv()
     
