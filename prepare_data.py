@@ -43,6 +43,11 @@ def clean_data(df):
     #create a empty df with new daily index to dump results in
     new_df =pd.DataFrame(index=new_index)
     # group data by date and contract. taking always first element to drop duplicate entrys
+    
+    # insert contract for legacy staking here
+    print(new_df.columns)
+    df.loc[df.identity == 'elrondcom','contract'] = 'elrondcom'
+    
     new_df=df.groupby(['Date','contract']).first()
 
     new_df.to_csv('Validator_data_from_'+str(df.Date.min())+'_until_'+str(df.Date.max())+'.csv')
@@ -58,7 +63,7 @@ if __name__ == '__main__':
     query = """select timestamp as 'Date',name,contract,apr_y as 'Delegator APR', apr_y as 'Validator APR',totalActiveStake as 'Stake Balance',
                 stake as 'Base Stake',stakePercent as 'Stake percent',serviceFee as 'Service fee',maxDelegationCap as 'Delegation cap',
                 topUp as 'Top up',validators as 'Number of active nodes',numNodes as 'Total number of nodes',numUsers as 'Number of delegators',identity,featured,explorerURL,location,rank,score,
-                checkCapOnRedelegate as 'Check cap if full' from validators WHERE contract is not null and identity is not null"""
+                checkCapOnRedelegate as 'Check cap if full' from validators WHERE (contract is not null or identity = 'elrondcom') and identity is not null"""
     # parse dates
     parse_dates = ['Date']
     
@@ -72,5 +77,4 @@ if __name__ == '__main__':
     
     # get dates only
     clean= clean_data(df)
-    clean.to_csv()
     
