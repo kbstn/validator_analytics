@@ -3,13 +3,14 @@
 """
 Created on Thu May 26 15:01:26 2022
 
-@author: konrad
+@author: kbstn
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import plotly.express as px
+import plotly.graph_objects as go
 
 
 def get_gini_coeff(array):
@@ -85,6 +86,40 @@ def plot_lorenz(df,key,figsize=(6,6)):
     fig.tight_layout()
     return fig,ax
 
+
+def line_plot_highlight(df,var_validator,popertyvar):
+    df['Date'] = df.index
+    
+    fig = go.Figure()
+    
+        
+    for validator in df.identity.unique():
+        
+        fig.add_trace(go.Scatter(x=df[df.identity == validator]['Date'], y=df[df.identity == validator][popertyvar],line_color='lightgrey',mode='lines',name = validator))
+    
+    
+    fig.add_trace(go.Scatter(x=df[df.identity == var_validator]['Date'], y=df[df.identity == var_validator][popertyvar],line_color='red',line_width=4,mode='lines',name = var_validator))
+
+
+    
+
+    return fig
+
+
+    # # our custom event handler
+    # def update_trace(trace, points, selector):
+    #     # this list stores the points which were clicked on
+    #     # in all but one trace they are empty
+    #     if len(points.point_inds) == 0:
+    #         return
+            
+    #     for i,_ in enumerate(f.data):
+    #         f.data[i]['line']['width'] = default_linewidth + highlighted_linewidth_delta * (i == points.trace_index)
+
+
+    # # we need to add the on_click event to each trace separately       
+    # for i in range( len(f.data) ):
+    #     f.data[i].on_click(update_trace)
 # data = pd.read_csv('Validator_data_from_2022-04-04_until_2022-05-26.csv',index_col='Date',encoding='latin1')
 # data['Stake Balance']=data['Stake Balance'].astype(float)/1e18
 # data['Number of delegators']=data['Number of delegators'].astype(float)

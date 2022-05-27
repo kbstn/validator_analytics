@@ -45,8 +45,9 @@ def clean_data(df):
     # group data by date and contract. taking always first element to drop duplicate entrys
     
     # insert contract for legacy staking here
-    print(new_df.columns)
     df.loc[df.identity == 'elrondcom','contract'] = 'elrondcom'
+    # df.loc[df.identity == 'elrondcom','Base Stake'] = 'elrondcom'
+
     
     new_df=df.groupby(['Date','contract']).first()
 
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     
     # query
     query = """select timestamp as 'Date',name,contract,apr_y as 'Delegator APR', apr_y as 'Validator APR',totalActiveStake as 'Stake Balance',
-                stake as 'Base Stake',stakePercent as 'Stake percent',serviceFee as 'Service fee',maxDelegationCap as 'Delegation cap',
+                stake as 'Base Stake',locked,stakePercent as 'Stake percent',serviceFee as 'Service fee',maxDelegationCap as 'Delegation cap',
                 topUp as 'Top up',validators as 'Number of active nodes',numNodes as 'Total number of nodes',numUsers as 'Number of delegators',identity,featured,explorerURL,location,rank,score,
                 checkCapOnRedelegate as 'Check cap if full' from validators WHERE (contract is not null or identity = 'elrondcom') and identity is not null"""
     # parse dates
@@ -72,7 +73,6 @@ if __name__ == '__main__':
     
     # read sqlite db into pandas dataframe
     df = read_sqlite_db_into_pandas(db_file, query, parse_dates, index_col)
-    print(df.head)
     # nach timestamp gruppieren und mean und sd berrechen
     
     # get dates only
