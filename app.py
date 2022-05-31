@@ -47,7 +47,7 @@ st.write("""(*this is a prototype based on maually collected api data, DATA shou
 
 
 # play arround with data
-data = pd.read_csv('Validator_data_from_2022-04-04_until_2022-05-27.csv',index_col='Date',encoding='latin1')
+data = pd.read_csv('Validator_data_from_2022-04-04_until_2022-05-31.csv',index_col='Date',encoding='latin1')
 data['Stake Balance']=data['Stake Balance'].astype(float)/1e18
 data['Number of delegators']=data['Number of delegators'].astype(float)
 data['Base Stake']=data['Base Stake'].astype(float)/1e18
@@ -98,6 +98,7 @@ color_discrete_map = {
     c: colors.get(c, default_color) 
     for c in data.identity.unique()}
 
+# to animate the graph we may first resample the data to daily and fill the gaps with interpolate
 fig_ov_property = px.bar(daily_data.sort_values(by=[popertyvar],ascending=False),x='identity',y=popertyvar,color='identity',
                color_discrete_map=color_discrete_map)
 fig_ov_property.update_layout({
