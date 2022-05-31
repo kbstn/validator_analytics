@@ -61,7 +61,11 @@ if __name__ == '__main__':
     db_file = '/home/konrad/Nextcloud/projects/crypto/elrond/dolphinpool/validator_db/validators.db'
     
     # query
+<<<<<<< HEAD
     query = """select timestamp as 'Date',name,contract,apr_y as 'Delegator APR', apr_x as 'Validator APR',totalActiveStake as 'Stake Balance',
+=======
+    query = """select timestamp as 'Date',name,contract,apr_y as 'Delegator APR', apr_y as 'Validator APR',totalActiveStake as 'Stake Balance',
+>>>>>>> first_outline
                 stake as 'Base Stake',locked,stakePercent as 'Stake percent',serviceFee as 'Service fee',maxDelegationCap as 'Delegation cap',
                 topUp as 'Top up',validators as 'Number of active nodes',numNodes as 'Total number of nodes',numUsers as 'Number of delegators',identity,featured,explorerURL,location,rank,score,
                 checkCapOnRedelegate as 'Check cap if full' from validators WHERE (contract is not null or identity = 'elrondcom') and identity is not null"""
