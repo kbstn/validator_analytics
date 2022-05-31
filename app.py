@@ -157,6 +157,8 @@ middle_column.markdown("""In economics, the Lorenz curve is a graphical represen
                     to the x% of people with worst risk scores. """)
 
 
+#change
+
 
 # st.plotly_chart(fig_ov_stake, use_container_width=True)    
   
